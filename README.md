@@ -1,30 +1,78 @@
-# Exam prep platform
+# 🚀 AI-Powered Exam Prep Platform  
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+An intelligent exam-prep web app built with **Next.js (App Router, TypeScript)** and **PostgreSQL**.  
+This platform helps students transform study notes into personalized question banks, quizzes, and adaptive learning dashboards — powered by **OpenAI** and enhanced with **Supabase Auth**.  
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/ishan565s-projects/v0-exam-prep-platform)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/hS9rfSRXy1W)
+---
 
-## Overview
+## ✨ Features
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+- 🔐 **Authentication** — Secure login/signup with Supabase  
+- 📚 **Reverse Question Generation** — Turn definitions, notes, or answers into exam-style questions  
+- ⚡ **Difficulty Modes** — Easy, Medium, Hard question generation  
+- 📄 **Bulk Upload** — Upload PDFs/notes → Auto-generate question banks  
+- 📝 **AI Notes Summarizer** — Highlight key concepts and compress big notes into digestible chunks  
+- 🧠 **Quiz Mode** — Take quizzes with instant feedback and explanations  
+- 🎮 **Gamification** — Badges, streaks, leaderboards for motivation  
+- 📊 **Dashboards** — Track progress, weak areas, and performance trends  
+- 🎙️ **Optional Voice Input** — Speak your answers, get questions generated  
 
-## Deployment
+---
 
-Your project is live at:
+## 🛠️ Tech Stack
 
-**[https://vercel.com/ishan565s-projects/v0-exam-prep-platform](https://vercel.com/ishan565s-projects/v0-exam-prep-platform)**
+**Frontend**
+- [Next.js 14 (App Router)](https://nextjs.org/) — React framework with server-side rendering
+- [TypeScript](https://www.typescriptlang.org/) — Strongly typed JS for safer development
+- [TailwindCSS](https://tailwindcss.com/) — Modern utility-first CSS for styling  
 
-## Build your app
+**Backend**
+- [PostgreSQL](https://www.postgresql.org/) — Relational database for users, notes, and question banks  
+- [Supabase Auth](https://supabase.com/) — Authentication and session handling  
+- [OpenAI API](https://platform.openai.com/) — Natural language question generation  
+- [Node.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/router-handlers) — Serverless endpoints inside Next.js  
 
-Continue building your app on:
+**Infra**
+- [Vercel](https://vercel.com/) — Hosting and serverless functions  
+- [Docker (optional)](https://www.docker.com/) — Containerized local dev  
+- [GitHub Actions](https://docs.github.com/en/actions) — CI/CD automation  
 
-**[https://v0.app/chat/projects/hS9rfSRXy1W](https://v0.app/chat/projects/hS9rfSRXy1W)**
+---
 
-## How It Works
+## 🗄️ Database Schema (Postgres)
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+```sql
+-- Users
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Notes
+CREATE TABLE notes (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  content TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Questions
+CREATE TABLE questions (
+  id SERIAL PRIMARY KEY,
+  note_id INT REFERENCES notes(id),
+  question_type TEXT,
+  difficulty TEXT,
+  question_text TEXT,
+  answer TEXT
+);
+
+-- Quiz Results
+CREATE TABLE quiz_results (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  score INT,
+  taken_at TIMESTAMP DEFAULT NOW()
+);
