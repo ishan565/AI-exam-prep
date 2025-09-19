@@ -3,14 +3,11 @@ import { createServerClient } from "@/lib/supabase/server"
 export async function GET() {
   try {
     const supabase = await createServerClient()
-    console.log("[v0] Supabase client created successfully")
 
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
-
-    console.log("[v0] User authentication check:", { user: !!user, error: !!authError })
 
     if (authError || !user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 })
